@@ -19,6 +19,13 @@ class PDFViewer:
         self.master.geometry('580x520+440+180')
         self.master.resizable(width=0, height=0)
         self.master.iconbitmap(self.master, 'pdf_file_icon.ico')
+        # CREATING THE MENU SYSTEM
+        self.menu = Menu(self.master)   # creating the menu
+        self.master.config(menu=self.menu)  # adding it to the main window
+        self.filemenu = Menu(self.menu) # creating a sub menu
+        self.menu.add_cascade(label="File", menu=self.filemenu) # adding a level to sub-menu
+        self.filemenu.add_command(label="Open File")
+        self.filemenu.add_command(label="Exit")
 
 
 root = Tk()
