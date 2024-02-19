@@ -25,7 +25,7 @@ class PDFViewer:
         self.filemenu = Menu(self.menu) # creating a sub menu
         self.menu.add_cascade(label="File", menu=self.filemenu) # adding a level to sub-menu
         self.filemenu.add_command(label="Open File")
-        self.filemenu.add_command(label="Exit")
+        self.filemenu.add_command(label="Exit", command=self.master.destroy)
         # creating the top frame
         self.top_frame = ttk.Frame(self.master, width=580, height=460)
         self.top_frame.grid(row=0, column=0)
