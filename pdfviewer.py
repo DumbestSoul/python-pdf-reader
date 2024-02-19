@@ -26,7 +26,26 @@ class PDFViewer:
         self.menu.add_cascade(label="File", menu=self.filemenu) # adding a level to sub-menu
         self.filemenu.add_command(label="Open File")
         self.filemenu.add_command(label="Exit")
-
+        # creating the top frame
+        self.top_frame = ttk.Frame(self.master, width=580, height=460)
+        self.top_frame.grid(row=0, column=0)
+        self.top_frame.grid_propagate(False)    # The frame will not propagate
+        self.bottom_frame=ttk.Frame(self.master, width=580, height=50)
+        self.bottom_frame.grid(row=1, column=0)
+        self.bottom_frame.grid_propagate(False)
+        # creating vertical scollbar
+        self.scrolly = Scrollbar(self.top_frame, orient=VERTICAL)
+        self.scrolly.grid(row=0, column=1, sticky=(N, S))   # N=NORTH, S=SOUTH
+        # creating horizontal scrollbar
+        self.scrollx = Scrollbar(self.top_frame, orient=HORIZONTAL)
+        self.scrollx.grid(row=1, column=0, sticky=(W, E))   #W=WEST, E=EAST
+        # adding canvas
+        self.output = Canvas(self.top_frame, bg='#ECE8F3', width=560, height=435)
+        self.output.configure(yscrollcommand=self.scrolly.set, xscrollcommand=self.scrollx.set)
+        # adding the canvas
+        self.output.grid(row=0, column=0)
+        self.scrolly.configure(command=self.output.yview)
+        self.scrollx.configure(command=self.output.xview)
 
 root = Tk()
 
