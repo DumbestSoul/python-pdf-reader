@@ -46,6 +46,18 @@ class PDFViewer:
         self.output.grid(row=0, column=0)
         self.scrolly.configure(command=self.output.yview)
         self.scrollx.configure(command=self.output.xview)
+        self.scrollx.configure(command=self.output.xview)
+        # ADDING UP AND DOWN BUTTONS
+        self.uparrow_icon=PhotoImage(file='uparrow.png')
+        self.downarrow_icon=PhotoImage(file='downarrow.png')
+        self.uparrow=self.uparrow_icon.subsample(5, 5)
+        self.downarrow=self.downarrow_icon.subsample(5, 5)
+        self.upbutton = ttk.Button(self.bottom_frame, image=self.uparrow)
+        self.upbutton.grid(row=0, column=1, padx=(270, 5), pady=8)
+        self.downbutton = ttk.Button(self.bottom_frame, image=self.downarrow)
+        self.downbutton.grid(row=0, column=3, pady=8)
+        self.page_label = ttk.Label(self.bottom_frame, text='page')
+        self.page_label.grid(row=0, column=4, padx=5)
 
 root = Tk()
 
