@@ -7,7 +7,19 @@ import os
 # PDF viewer class
 class PDFViewer:
     def __init__(self, master):
-        pass
+        # THIS ALL VARAIBLE IS FOR THE CURRENT PDF FILE
+        self.path = None
+        self.fileisopen = None
+        self.author = None
+        self.name = None
+        self.curr_page = 0
+        self.numPages = None
+        self.master = master
+        self.master.title('PDF VIEWER')
+        self.master.geometry('580x520+440+180')
+        self.master.resizable(width=0, height=0)
+        self.master.iconbitmap(self.master, 'pdf_file_icon.ico')
+
 
 root = Tk()
 
