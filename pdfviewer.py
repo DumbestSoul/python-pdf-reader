@@ -2,6 +2,7 @@ from tkinter import *   # importing everything from tkinter
 from tkinter import ttk # import ttk module for styling widgets
 from tkinter import filedialog as fd
 import os
+from miner import PDFMiner
 
 
 # PDF viewer class
@@ -24,7 +25,7 @@ class PDFViewer:
         self.master.config(menu=self.menu)  # adding it to the main window
         self.filemenu = Menu(self.menu) # creating a sub menu
         self.menu.add_cascade(label="File", menu=self.filemenu) # adding a level to sub-menu
-        self.filemenu.add_command(label="Open File")
+        self.filemenu.add_command(label="Open File", command=self.open_file)
         self.filemenu.add_command(label="Exit", command=self.master.destroy)
         # creating the top frame
         self.top_frame = ttk.Frame(self.master, width=580, height=460)
@@ -52,12 +53,52 @@ class PDFViewer:
         self.downarrow_icon=PhotoImage(file='downarrow.png')
         self.uparrow=self.uparrow_icon.subsample(5, 5)
         self.downarrow=self.downarrow_icon.subsample(5, 5)
-        self.upbutton = ttk.Button(self.bottom_frame, image=self.uparrow)
+        self.upbutton = ttk.Button(self.bottom_frame, image=self.uparrow, command=self.previous_page)
         self.upbutton.grid(row=0, column=1, padx=(270, 5), pady=8)
-        self.downbutton = ttk.Button(self.bottom_frame, image=self.downarrow)
+        self.downbutton = ttk.Button(self.bottom_frame, image=self.downarrow, command=self.next_page)
         self.downbutton.grid(row=0, column=3, pady=8)
         self.page_label = ttk.Label(self.bottom_frame, text='page')
         self.page_label.grid(row=0, column=4, padx=5)
+
+    def open_file(self):
+        filepath = fd.askopenfilename(title='Select a PDF file', initialdir=os.getcwd, filetypes=(('PDF', '*.pdf'), ))
+
+        # checking if the file exists
+        if filepath:
+            self.path=filepath
+            filename = os.path.basename(self.path)
+            self.miner = PDFMiner(self.path)
+            data, numPages = self.miner.get_metadata()
+
+            self.curr_page=0
+            if numPages:
+                self.name=data.get('title', filename[:-4])
+                self.author=data.get('author', None)
+                self.numPages=numPages
+                self.fileisopen=True
+                self.display_page()
+                self.master.title(self.name)
+
+    def display_page(self):
+        if 0<=self.curr_page<self.numPages:
+            self.img_file=self.miner.get_page(self.curr_page)
+            self.output.create_image(0, 0, anchor='nw', image=self.img_file)
+            self.stringified_current_page = self.curr_page+1
+            self.page_label['text']=str(self.stringified_current_page)+' of '+str(self.numPages)
+            region=self.output.bbox(ALL)
+            self.output.configure(scrollregion=region)
+
+    def next_page(self):
+        if self.fileisopen:
+            if self.curr_page<=self.numPages-1:
+                self.curr_page+=1
+                self.display_page()
+
+    def previous_page(self):
+        if self.fileisopen:
+            if self.curr_page>0:
+                self.curr_page-=1
+                self.display_page()
 
 root = Tk()
 

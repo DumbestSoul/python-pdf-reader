@@ -7,7 +7,7 @@ class PDFMiner:
     def __init__(self, filepath):
         self.filepath = filepath
         self.pdf = fitz.open(self.filepath)
-        self.first_page = self.pdf.load(0)
+        self.first_page = self.pdf.load_page(0)
         self.width, self.height = self.first_page.rect.width, self.first_page.rect.height
         zoomdict = {800:0.8, 700:0.6, 600:1.0, 500:1.0}
         width = int(math.floor(self.width/100.0) * 100)
